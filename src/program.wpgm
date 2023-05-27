@@ -1,0 +1,11 @@
+import wollok.game.*
+import dino.*
+import configuracion.*
+
+program dinoChrome {
+
+	configuracion.iniciar() 
+	
+	game.start()
+
+}
