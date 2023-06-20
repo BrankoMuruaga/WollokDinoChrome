@@ -37,20 +37,21 @@ object dino {
     const posicionFinal = posicionInicial + 200;
     var velocidad = 20
     
-    game.onTick(5, "salto", {
-        if (position.y() < posicionFinal && subir){
-            position = position.up(velocidad)
-            velocidad -= 0.1
-        } else {
-            subir = false;
-            velocidad += 0.1
-            position = position.down(velocidad);
-            if (position.y() <= posicionInicial){
-            	position = game.at(position.x(), posicionInicial);
-                game.removeTickEvent("salto");
-            }
-       	}
-   		})
+    if(position.y() == 10){
+	    game.onTick(5, "salto", {
+	        if (position.y() < posicionFinal && subir){
+	            position = position.up(velocidad)
+	            velocidad -= 0.1
+	        } else {
+	            subir = false;
+	            velocidad += 0.1
+	            position = position.down(velocidad);
+	            if (position.y() <= posicionInicial){
+	            	position = game.at(position.x(), posicionInicial);
+	                game.removeTickEvent("salto");
+	            }
+	       	}
+	   		})
+		}
 	}
-
 }
