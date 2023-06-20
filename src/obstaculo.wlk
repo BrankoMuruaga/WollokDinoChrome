@@ -69,8 +69,26 @@ class Cactus inherits Obstaculo(
 class Ave inherits Obstaculo(
 	altoDeAreaDeColision = 60,
 	anchoDeAreaDeColision = 30,
-	alturaDeSpawn = 150
+	alturaDeSpawn = 150,
+	image = "ave (1).png"
 ){
+	
+	override method iniciar(){
+		game.onTick(150, "animacion",{self.animarAve()}) 
+		super()
+	}
+	method animarAve() {
+		if(image == "ave (1).png"){
+			image = "ave (2).png"
+		}
+		else if (image == "ave (2).png"){
+			image = "ave (1).png"
+		}
+		else{
+			image = "ave (1).png"
+		}
+	}
+	
 	override method accionAlColisionar(){
 		return {game.stop()}
 	}

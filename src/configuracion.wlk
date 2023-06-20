@@ -9,6 +9,8 @@ object configuracion {
 	var property puntajeActual = 0
 	
 	method iniciar(){
+		
+		
 		game.title("Dino Chrome")
 		game.cellSize(1)
 		game.width(1000)
@@ -22,8 +24,14 @@ object configuracion {
 		self.crearFondo()
 		
 		game.onTick(3000, "cactus", {
-			const cactus = new Cactus(image = "cactus" + 1.randomUpTo(6).truncate(0).toString() + ".png")
-			cactus.iniciar()
+			const aveBaja = new Ave(alturaDeSpawn = 47)
+			const aveAlta = new Ave()
+			
+			const cantidadDeCactus = ["1", "2", "3", "4", "5", "6"]
+			const cactus = new Cactus(image = "cactus" + cantidadDeCactus.anyOne() + ".png")
+			
+			const obstaculo = [aveBaja, aveAlta, cactus]
+			obstaculo.anyOne().iniciar()
 		})
 		
 		puntaje.position(game.at( game.width() - 150 ,game.height() - 50))
