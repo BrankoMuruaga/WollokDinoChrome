@@ -6,7 +6,7 @@ import background.*
 import colision.*
 
 object configuracion {
-	
+	var property puntajeActual = 0
 	
 	method iniciar(){
 		game.title("Dino Chrome")
@@ -26,13 +26,8 @@ object configuracion {
 			cactus.iniciar()
 		})
 		
-		var contador = 0
 		puntaje.position(game.at( game.width() - 150 ,game.height() - 50))
-		game.onTick(500 ,"puntaje", {
-			puntaje.agregarPuntaje(contador)
-			contador++
-		})
-		
+		puntaje.agregarPuntaje(puntajeActual)
 			
 		
 	}

@@ -1,6 +1,8 @@
 import wollok.game.*
 import colision.*
 import dino.*
+import configuracion.*
+import puntaje.*
 
 class Obstaculo{
 	const alturaDeSpawn
@@ -35,6 +37,8 @@ class Obstaculo{
 				}
 				else{
 					self.eliminar()
+					configuracion.puntajeActual(configuracion.puntajeActual() + 1)
+					puntaje.agregarPuntaje(configuracion.puntajeActual())
 				}
 				
 			})
