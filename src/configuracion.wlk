@@ -21,31 +21,16 @@ object configuracion {
 		self.controles()
 		self.crearFondo()
 		
-		game.onTick(1000, "cactus", {
+		game.onTick(3000, "cactus", {
 			const cactus = new Cactus(image = "cactus" + 1.randomUpTo(6).truncate(0).toString() + ".png")
-			const colisionContraCactus = 
-				new AreaDeColision(
-				altoDeArea = 90, 
-				anchoDeArea = 90,
-				objPrincipal = dino,
-				objQueColisiona = cactus,
-				accion = {game.stop()}
-				)
-			colisiones.colisiones().add(colisionContraCactus)
 			cactus.iniciar()
-			
 		})
-		
-		
 		
 		var contador = 0
 		puntaje.position(game.at( game.width() - 150 ,game.height() - 50))
 		game.onTick(500 ,"puntaje", {
 			puntaje.agregarPuntaje(contador)
 			contador++
-		})
-		game.onTick(500 ,"puntaje", {
-			console.println(colisiones.colisiones())
 		})
 		
 			

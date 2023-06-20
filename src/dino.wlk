@@ -1,19 +1,24 @@
 import wollok.game.*
-import dibujoDeArea.*
-
+import colision.*
 
 object dino {
 	var property position = game.at(50, 10)
 	var property image = "dino3.png"
-	//const areaDeColisiones = new AreaDeColisiones(velocidad = 0, areaDeColision = area.px(90, 90), objetoBase = self)
-	
+	const colisionContraCactus = 
+				new AreaDeColision(
+				altoDeArea = 90, 
+				anchoDeArea = 90,
+				objPrincipal = self,
+				objsQueColisionan = colisiones.objsQueColisionanContraDino(),
+				accion = {game.stop()}
+				)
 	
 	method iniciar(){
 		self.position(game.at(50, 10))
 		game.addVisualCharacter(self)
 		game.onTick(150, "animacion",{self.animarDino()}) 
-		//areaDeColisiones.crearArea()
-		
+		colisiones.objsQueColisionanContraItem().add(self)
+		colisiones.colisionesContraDino().add(colisionContraCactus)
 	}
 	
 	method animarDino(){
@@ -32,21 +37,20 @@ object dino {
     const posicionFinal = posicionInicial + 200;
     var velocidad = 20
     
-    if(position.y() == 10){
-	    game.onTick(5, "salto", {
-	        if (position.y() < posicionFinal && subir){
-	            position = position.up(velocidad)
-	            velocidad -= 0.1
-	        } else {
-	            subir = false;
-	            velocidad += 0.1
-	            position = position.down(velocidad);
-	            if (position.y() <= posicionInicial){
-	            	position = game.at(position.x(), posicionInicial);
-	                game.removeTickEvent("salto");
-	            }
-	       	}
-	   		})
-		}
+    game.onTick(5, "salto", {
+        if (position.y() < posicionFinal && subir){
+            position = position.up(velocidad)
+            velocidad -= 0.1
+        } else {
+            subir = false;
+            velocidad += 0.1
+            position = position.down(velocidad);
+            if (position.y() <= posicionInicial){
+            	position = game.at(position.x(), posicionInicial);
+                game.removeTickEvent("salto");
+            }
+       	}
+   		})
 	}
+
 }

@@ -1,21 +1,51 @@
 import wollok.game.*
+
+/* Cada cosa que quieras que colisione con el personaje hay que añadirlo a la lista de objetos que colisionan
+ * dentro del objeto colisiones
+ * 
+ * colisiones.objsQueColisionanContraHeroe().add(enemigo)
+ * 
+ * 
+ * Para golpes del heroe contra el enemigo se puede hacer lo siguiente
+ * 
+ * keyboard.space().onPressDo{
+				game.addVisual(objetoColision)
+				colisiones.objsQueColisionanContraEnemigo().add(objetoColision)
+				game.schedule(1,{
+					game.removeVisual(objetoColision)
+					colisiones.objsQueColisionanContraEnemigo().remove(objetoColision)
+				})
+		}
+   Donde "objetoColision" es un objeto de un pixel con una imagen transparente.
+   Este aparece y desaparece en un instante, produciendo en el enemigo el efecto requerido solo una vez
+  
+   Ya que el heroe siempre pega en un mismo lugar, la posicion en la que va a aparecer el objeto 
+   puede ser siempre la misma
+ */
+ 
+ 
 object colisiones{
 	/* Proposito: Verificar constantemente las colisiones del juego
 	 * 
-	 * Crear una nueva instancia de cada colision nueva y agregarla a la lista "colisiones"
+	 * Crear una nueva instancia de cada colision y agregarla a la lista "colisiones"
 	 */
-	const property colisiones = []
+	 
+	const property objsQueColisionanContraDino = [] 
+	const property objsQueColisionanContraItem = [] 
+	
+	const property colisionesContraDino = []
+	const property colisionesContraItem = []
 	
 	
 	method verificarColisiones(){	
-		game.onTick(100, "colision", {
-			colisiones.forEach{c => c.iniciar()}
+		game.onTick(10, "colision", {
+			colisionesContraDino.forEach{c => c.colisionar()}
+			colisionesContraItem.forEach{c => c.colisionar()}
 		})
 		
 	}
 			
 }
-
 
 class AreaDeColision {
 	/*	Proposito: Crea un area partiendo de la posicion de **objPrincipal**, en la que si entra **objQueColisiona**
@@ -25,7 +55,7 @@ class AreaDeColision {
 	 * 				altoDeArea: un Numero - El alto que tendra el area de la colision
 	 * 				anchoDeArea: un Numero - El ancho que tendra el area de la colision
 	 * 				objPrincipal: un Objeto Posicionable - El objeto en el cual se generara el area
-	 * 				objQueColisiona: un Objeto Posicionable - El objeto el cual se verificara si se produce una colision
+	 * 				objQueColisiona: una lista de Objetos Posicionables - Los objeto contra los que se verificara si se produce una colision
 	 * 				accion: un Closure - La accion a realizar una vez se produzca la colision
 	 * 
 	 * 				-opcional-
@@ -38,7 +68,7 @@ class AreaDeColision {
 	var altoDeArea
 	var anchoDeArea
 	var objPrincipal
-	var objQueColisiona
+	var objsQueColisionan
 	var accion
 	var colisionActiva = true
 	
@@ -50,21 +80,22 @@ class AreaDeColision {
 		colisionActiva = true
 	}
 	
-	method iniciar(){
-		self.colisionar(objPrincipal, objQueColisiona, accion)
-	}
-	
-	method colisionar(objetoPrincipal, objetoQueColisiona, unClosure){
+	method colisionar(){
 		/*
 	 * Proposito:   Crea un area de colision partiendo desde la posicion de **objetoPrincipal**
 	 *  			y con el alto y ancho indicado al momento de instanciar la clase
-	 * 
-	 * Parametros: 
-	 * 				objetoPrincipal: El objeto el cual tendra el area de colision
-	 * 				objetoQueColisiona: El objeto el cual se comprobara si esta dentro del area de **objetoPrincipal**
-	 *				unClosure: La accion a realizar cuando ambos objetos colisionan
 	 */
-		if(self.estaEnColision(objetoPrincipal, objetoQueColisiona))unClosure.apply()
+	 
+	 	const algunoEstaEnColision = objsQueColisionan.any{o => self.estaEnColision(objPrincipal, o)}
+		if(algunoEstaEnColision){
+			accion.apply()			
+		}
+	}
+	
+	method estaEnColision() = objsQueColisionan.any{o => self.estaEnColision(objPrincipal, o)}
+	
+	method objetoEnColision(){
+		return objsQueColisionan.find{o => self.estaEnColision(objPrincipal, o)}
 	}
 	
 	method estaEnColision(objetoPrincipal, objetoQueColisiona){
@@ -85,7 +116,7 @@ class AreaDeColision {
 		const estaEnRangoYDeColision = posY_ObjetoQueColisiona <=  posY_ObjetoPrincipal + altoDeArea && posY_ObjetoQueColisiona >=  posY_ObjetoPrincipal
 		
 		
-		return estaEnRangoXDeColision && estaEnRangoYDeColision && colisionActiva
+		return colisionActiva && estaEnRangoXDeColision && estaEnRangoYDeColision
 	}
 	
 }
