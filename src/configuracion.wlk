@@ -1,6 +1,6 @@
 import wollok.game.*
 import dino.*
-import cactus.*
+import obstaculo.*
 import puntaje.*
 import background.*
 import colision.*
