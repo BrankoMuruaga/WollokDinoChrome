@@ -1,17 +1,18 @@
 import wollok.game.*
-
+import dibujoDeArea.*
 
 
 object dino {
-	var property position
+	var property position = game.at(50, 10)
 	var property image = "dino3.png"
+	const areaDeColisiones = new AreaDeColisiones(velocidad = 0, areaDeColision = area.px(90, 90), objetoBase = self)
 	
 	
 	method iniciar(){
 		self.position(game.at(50, 10))
 		game.addVisualCharacter(self)
 		game.onTick(150, "animacion",{self.animarDino()}) 
-		
+		areaDeColisiones.crearArea()
 		
 	}
 	
